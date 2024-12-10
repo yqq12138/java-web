@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.FeedbackMapper">
+
+    <sql id="Base_Column_List">
+        id,title,problem,idea,user_id,time,reply,reply_time
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Feedback">
+        select
+        feedback.*, user.name as userName
+        from feedback
+        left join user on feedback.user_id = user.id
+        <where>
+            <if test="title != null"> and feedback.title like concat('%', #{title}, '%')</if>
+            <if test="userId != null"> and feedback.user_id = #{userId}</if>
+        </where>
+        order by feedback.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Feedback">
+        select
+        <include refid="Base_Column_List" />
+        from feedback
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from feedback
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Feedback" useGeneratedKeys="true" keyProperty="id">
+        insert into feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null">title,</if>
+            <if test="problem != null">problem,</if>
+            <if test="idea != null">idea,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="time != null">time,</if>
+            <if test="reply != null">reply,</if>
+            <if test="replyTime != null">reply_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null">#{title},</if>
+            <if test="problem != null">#{problem},</if>
+            <if test="idea != null">#{idea},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="time != null">#{time},</if>
+            <if test="reply != null">#{reply},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Feedback">
+        update feedback
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="problem != null">
+                problem = #{problem},
+            </if>
+            <if test="idea != null">
+                idea = #{idea},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="reply != null">
+                reply = #{reply},
+            </if>
+            <if test="replyTime != null">
+                reply_time = #{replyTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

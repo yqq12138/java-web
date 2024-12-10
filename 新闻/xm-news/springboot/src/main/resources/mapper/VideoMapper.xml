@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.VideoMapper">
+
+    <sql id="Base_Column_List">
+        id,name,file,time,read_count
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Video">
+        select
+        <include refid="Base_Column_List" />
+        from video
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+            <if test="file != null"> and file like concat('%', #{file}, '%')</if>
+            <if test="time != null"> and time like concat('%', #{time}, '%')</if>
+            <if test="readCount != null"> and read_count = #{readCount}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Video">
+        select
+        <include refid="Base_Column_List" />
+        from video
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from video
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Video" useGeneratedKeys="true" keyProperty="id">
+        insert into video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="file != null">file,</if>
+            <if test="time != null">time,</if>
+            <if test="readCount != null">read_count,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="file != null">#{file},</if>
+            <if test="time != null">#{time},</if>
+            <if test="readCount != null">#{readCount},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Video">
+        update video
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="file != null">
+                file = #{file},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="readCount != null">
+                read_count = #{readCount},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

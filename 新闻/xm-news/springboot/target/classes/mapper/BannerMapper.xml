@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BannerMapper">
+
+    <sql id="Base_Column_List">
+        id,news_id,img
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Banner">
+        select
+        banner.*, news.title as title
+        from banner
+        left join news on banner.news_id = news.id
+        <where>
+            <if test="title != null"> and news.title like concat('%', #{title} ,'%')</if>
+        </where>
+        order by banner.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Banner">
+        select
+        <include refid="Base_Column_List" />
+        from banner
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from banner
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Banner" useGeneratedKeys="true" keyProperty="id">
+        insert into banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="newsId != null">news_id,</if>
+            <if test="img != null">img,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="newsId != null">#{newsId},</if>
+            <if test="img != null">#{img},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Banner">
+        update banner
+        <set>
+            <if test="newsId != null">
+                news_id = #{newsId},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

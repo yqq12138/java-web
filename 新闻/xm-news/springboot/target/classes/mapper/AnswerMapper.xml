@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AnswerMapper">
+
+    <sql id="Base_Column_List">
+        id,question_id,content,user_id,time,status
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.Answer">
+        select
+        answer.*, question.title questionTitle, user.name as userName
+        from answer
+        left join question on answer.question_id = question.id
+        left join user on answer.user_id = user.id
+        <where>
+            <if test="content != null"> and answer.content like concat('%', #{content}, '%')</if>
+            <if test="userId != null"> and answer.user_id = #{userId}</if>
+        </where>
+        order by answer.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Answer">
+        select
+        <include refid="Base_Column_List" />
+        from answer
+        where id = #{id}
+    </select>
+
+    <select id="selectFrontPage" resultType="com.example.entity.Answer">
+        select
+        answer.*, question.title questionTitle, user.name as userName, user.avatar as userAvatar
+        from answer
+        left join question on answer.question_id = question.id
+        left join user on answer.user_id = user.id
+        <where>
+            answer.status = '通过' and answer.question_id = #{questionId}
+        </where>
+        order by answer.id desc
+    </select>
+
+    <delete id="deleteById">
+        delete from answer
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Answer" useGeneratedKeys="true" keyProperty="id">
+        insert into answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="questionId != null">question_id,</if>
+            <if test="content != null">content,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="time != null">time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="questionId != null">#{questionId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="time != null">#{time},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Answer">
+        update answer
+        <set>
+            <if test="questionId != null">
+                question_id = #{questionId},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
