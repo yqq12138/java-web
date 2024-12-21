@@ -1,9 +1,12 @@
 <template>
-  <el-aside>
+  <el-aside width="sidewidth">
       <el-menu
           text-color="#fff"
+          :collapse="isCollapse"
+          :collapse-transition="false"
           >
-        <h3>通用后台管理</h3>
+        <h3 v-show="!isCollapse">通用后台管理</h3>
+        <h3 v-show="isCollapse">后台</h3>
         <el-menu-item 
           v-for="item in noChildren"
           :index="item.path"
@@ -36,11 +39,9 @@
   </el-aside>
 </template>
 
-<script>
+<script setup>
+import { useAllDataStore } from '@/stores';
 import { computed, ref } from 'vue';
-
-export default {
-  setup() {
 
 const list = ref([
     {
@@ -89,13 +90,14 @@ const list = ref([
 
 const noChildren = computed(() => list.value.filter(item => !item.children) );
 const hasChildren = computed(() => list.value.filter(item =>  item.children) );
+const store = useAllDataStore();
+const isCollapse = computed(() => store.state.isCollapse);
+const sidewidth = computed(() => store.state.isCollapse ? '60px' : '180px');
 
-return {
-      noChildren,
-      hasChildren,
-    };
-  }
-}
+// return {
+//       noChildren,
+//       hasChildren,
+//     }
 </script>
 
 <style>
@@ -117,7 +119,6 @@ return {
 
 .el-aside{
   height: 100%;
-  width: 180px;
   background-color: #545c64;
 }
 </style>
