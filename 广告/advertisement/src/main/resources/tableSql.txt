@@ -1,0 +1,72 @@
+create table ad_application
+(
+    id          bigint auto_increment
+        primary key,
+    user_id     varchar(50)                           not null,
+    store_name  varchar(100)                          not null,
+    store_url   varchar(255)                          not null,
+    status      varchar(20) default 'PENDING'         not null,
+    create_time datetime    default CURRENT_TIMESTAMP null
+);
+
+create table advertisements
+(
+    id              varchar(100)                        not null
+        primary key,
+    user_id         varchar(50)                         not null,
+    title           varchar(100)                        not null,
+    category        varchar(50)                         not null,
+    gender          varchar(20)                         not null,
+    price           decimal(10, 2)                      not null,
+    image_url       varchar(200)                        null,
+    recommend_score decimal(10, 2)                      null,
+    create_time     timestamp default CURRENT_TIMESTAMP null
+);
+
+create table products
+(
+    id          bigint auto_increment
+        primary key,
+    title       varchar(100)                        not null,
+    category    varchar(50)                         null,
+    price       decimal(10, 2)                      null,
+    gender      varchar(10)                         null,
+    image_url   varchar(200)                        null,
+    create_time timestamp default CURRENT_TIMESTAMP null
+);
+
+create table user
+(
+    id          bigint auto_increment
+        primary key,
+    username    varchar(50)                        not null,
+    password    varchar(255)                       not null,
+    role        varchar(20)                        not null,
+    create_time datetime default CURRENT_TIMESTAMP null,
+    constraint username
+        unique (username)
+);
+
+create table user_behavior
+(
+    id                bigint auto_increment
+        primary key,
+    visitor_id        varchar(100)                       not null,
+    action            varchar(50)                        null,
+    category          varchar(50)                        null,
+    gender            varchar(20)                        null,
+    price             decimal(10, 2)                     null,
+    user_agent        text                               null,
+    browser           varchar(50)                        null,
+    platform          varchar(50)                        null,
+    language          varchar(20)                        null,
+    screen_resolution varchar(20)                        null,
+    timezone          varchar(50)                        null,
+    create_time       datetime default CURRENT_TIMESTAMP null
+);
+
+create index idx_create_time
+    on user_behavior (create_time);
+
+create index idx_visitor_id
+    on user_behavior (visitor_id);
