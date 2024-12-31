@@ -10,8 +10,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        //跨域问题
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173","http://localhost:5174")  // 前端开发服务器地址
+                .allowedOrigins("http://localhost:5173","http://localhost:5174",
+                        "http://10.100.164.30:5173","http://10.100.164.30:5174",
+                        "http://10.100.164.31:5173","http://10.100.164.31:5174",
+                        "http://10.100.164.32:5173","http://10.100.164.32:5174",
+                        "http://10.100.164.33:5173","http://10.100.164.33:5174",
+                        "http://10.100.164.30:8080","http://10.100.164.30:8081",
+                        "http://10.100.164.31:8080","http://10.100.164.31:8081",
+                        "http://10.100.164.32:8080","http://10.100.164.32:8081",
+                        "http://10.100.164.33:8080","http://10.100.164.33:8081",
+                        "http://localhost:8080","http://localhost:8081")  // 前端开发服务器地址
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
