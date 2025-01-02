@@ -1,3 +1,8 @@
+<script setup>
+import Ad from "@/components/Ad"; // 引入Ad组件
+import Hot from "@/components/Hot";
+</script>
+
 <template>
   <div class="main-content">
     <div style="display: flex; grid-gap: 20px">
@@ -63,14 +68,18 @@
       </div>
       <!-- 右侧部分结束-->
     </div>
+
+    <!-- 使用Ad组件 -->
+    <Ad />
   </div>
 </template>
 
 <script>
-
-import Hot from "@/components/Hot";
 export default {
-  components: {Hot},
+  components: {
+    Hot,
+    Ad  // 注册Ad组件
+  },
   data() {
     return {
       bannerList: [],
@@ -167,6 +176,9 @@ export default {
 </script>
 
 <style scoped>
+/* 广告样式 */
+@import "@/assets/css/ad.css"; 
+
 .category-item {
   border: 1px solid #2a60c9;
   color: #2a60c9;
